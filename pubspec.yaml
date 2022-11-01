@@ -41,7 +41,8 @@ flutter:
       android:
         package: com.metamorfosis_labs.flutter_ironsource_x
         pluginClass: FlutterIronsource_xPlugin
-    # -------------------
+      ios:
+        pluginClass: FlutterIronsource_xPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
