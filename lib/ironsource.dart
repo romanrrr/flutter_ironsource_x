@@ -17,7 +17,9 @@ enum IronsourceAdEvent {
   adShown,
   adClicked,
   adReady,
-  interstitialAdLoadFailed
+  interstitialAdLoadFailed,
+  offerCredited,
+  offerCreditFailed,
 }
 
 typedef IronsourceAdListener(IronsourceAdEvent event, dynamic arguments);
@@ -27,6 +29,7 @@ class IronSource {
   MethodChannel("com.metamorfosis_labs.flutter_ironsource_x");
   static IronsourceAdListener? _rewardedListener;
   static IronsourceAdListener? _interstititalListener;
+  static IronsourceAdListener? _offerwallListener;
 
 
   static set rewardedListener(IronsourceAdListener value) {
@@ -35,6 +38,10 @@ class IronSource {
 
   static set interstititalListener(IronsourceAdListener value) {
     _interstititalListener = value;
+  }
+
+  static set offerwallListener(IronsourceAdListener value) {
+    _offerwallListener = value;
   }
 
   static FutureOr<dynamic> initialize(
@@ -122,6 +129,15 @@ class IronSource {
     ON_INTERSTITIAL_AD_SHOW_FAILED: IronsourceAdEvent.adShowFailed,
   };
 
+  static final Map<String, IronsourceAdEvent> offerwallEventMap = {
+    ON_OFFERWALL_AVAILABLE: IronsourceAdEvent.adAvailabilityChanged,
+    ON_OFFERWALL_OPENED: IronsourceAdEvent.adOpened,
+    ON_OFFERWALL_SHOW_FAILED: IronsourceAdEvent.adShowFailed,
+    ON_OFFERWALL_AD_CREDITED: IronsourceAdEvent.offerCredited,
+    ON_OFFERWALL_CREDITS_FAILED: IronsourceAdEvent.offerCreditFailed,
+    ON_OFFERWALL_CLOSED: IronsourceAdEvent.adClosed,
+  };
+
   static Future<dynamic> _handle(MethodCall call) async {
     if(rewardedEventMap.containsKey(call.method)) {
       _rewardedListener?.call(
@@ -129,6 +145,9 @@ class IronSource {
     }else if(interstitialEventMap.containsKey(call.method)){
       _interstititalListener?.call(
           interstitialEventMap[call.method]!, call.arguments);
+    }else if(offerwallEventMap.containsKey(call.method)){
+      _offerwallListener?.call(
+          offerwallEventMap[call.method]!, call.arguments);
     }
   }
 }

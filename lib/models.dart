@@ -11,9 +11,9 @@ class Placement {
 
   Placement(
       {this.placementName,
-        this.rewardName,
-        this.placementId,
-        this.rewardAmount});
+      this.rewardName,
+      this.placementId,
+      this.rewardAmount});
 }
 
 class OfferwallCredit {
